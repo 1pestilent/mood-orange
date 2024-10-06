@@ -1,13 +1,5 @@
 import psycopg2
-
-def create_connection():
-    return psycopg2.connect(
-        dbname='orange_db', 
-        user='root',
-        password='root',
-        host='localhost',
-        port='5433'            
-    )
+from dbconn import create_connection
 
 def create_tables(con):
     cur = con.cursor()
@@ -68,7 +60,7 @@ def create_tables(con):
                 CREATE TABLE IF NOT EXISTS stock(
                 id SERIAL PRIMARY KEY NOT NULL,
                 product_id INTEGER REFERENCES products(id),
-                quantity INTEGER
+                quantity INTEGER)
                 """)
 
     cur.execute("""
@@ -83,7 +75,7 @@ def create_tables(con):
     cur.execute("""
                 CREATE TABLE IF NOT EXISTS bank(
                 id SERIAL PRIMARY KEY NOT NULL,
-                balance FLOAT
+                balance FLOAT)
                 """)
     
     cur.execute("""
@@ -91,7 +83,7 @@ def create_tables(con):
                 id SERIAL PRIMARY KEY NOT NULL,
                 type_id INTEGER REFERENCES transaction_types(id),
                 amount FLOAT,
-                date TIMESTAMP
+                date TIMESTAMP)
                 """)
     
 
@@ -100,3 +92,6 @@ def create_tables(con):
     con.commit()
     cur.close()
     con.close()
+
+conn = create_connection()
+create_tables(conn)
