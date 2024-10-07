@@ -1,5 +1,5 @@
 import psycopg2
-from dbconn import create_connection
+from db_conn import create_connection
 
 def create_tables(con):
     cur = con.cursor()
@@ -49,7 +49,7 @@ def create_tables(con):
     cur.execute("""
                 CREATE TABLE IF NOT EXISTS sales(
                 id SERIAL PRIMARY KEY NOT NULL,
-                product INTEGER REFERENCES products(id),
+                product_id INTEGER REFERENCES products(id),
                 customer VARCHAR(128) REFERENCES customers(email),
                 quantity INTEGER,
                 total_amount FLOAT,
