@@ -1,6 +1,6 @@
 ## Установка
 
-1. git clone https://github.com/1pestilent/mood-orange.git
+1. git clone `https://github.com/1pestilent/mood-orange.git`
 
 2. Создание виртуальной среды   \
 2.1 `python3 -m venv venv`  \
