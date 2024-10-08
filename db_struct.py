@@ -29,6 +29,12 @@ def create_tables(con):
                 """)
 
     cur.execute("""
+                CREATE TABLE IF NOT EXISTS permissions(
+                id SERIAL PRIMARY KEY NOT NULL,
+                permission_name VARCHAR(64))
+                """)
+
+    cur.execute("""
                 CREATE TABLE IF NOT EXISTS products(
                 id SERIAL PRIMARY KEY NOT NULL,
                 sort INTEGER REFERENCES sorts(id),
@@ -37,20 +43,21 @@ def create_tables(con):
                 """)
 
     cur.execute("""
-                CREATE TABLE IF NOT EXISTS customers(
-                email VARCHAR(128) PRIMARY KEY NOT NULL,
+                CREATE TABLE IF NOT EXISTS users(
+                email VARCHAR(128) PRIMARY KEY NOT NULL UNIQUE,
                 last_name VARCHAR(64),
                 first_name VARCHAR(64),
                 middle_name VARCHAR(64),
                 phone_number VARCHAR(32),
-                date_of_birth DATE)
+                date_of_birth DATE,
+                permissions INTEGER REFERENCES permissions(id))
                 """)
 
     cur.execute("""
                 CREATE TABLE IF NOT EXISTS sales(
                 id SERIAL PRIMARY KEY NOT NULL,
                 product_id INTEGER REFERENCES products(id),
-                customer VARCHAR(128) REFERENCES customers(email),
+                user_id VARCHAR(128) REFERENCES users(email),
                 quantity INTEGER,
                 total_amount FLOAT,
                 date TIMESTAMP)
@@ -85,9 +92,6 @@ def create_tables(con):
                 amount FLOAT,
                 date TIMESTAMP)
                 """)
-    
-
-    
 
     con.commit()
     cur.close()

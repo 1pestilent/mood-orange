@@ -25,11 +25,11 @@ def add_customer():
     cur = con.cursor()
 
     cur.execute("""
-        INSERT INTO customers (email, last_name, first_name, middle_name, phone_number, date_of_birth)
+        INSERT INTO users (email, last_name, first_name, middle_name, phone_number, date_of_birth)
         VALUES (%s, %s, %s, %s, %s, %s)
         RETURNING email; """,(email, last_name, first_name, middle_name, phone_number, date_of_birth))
 
-    customer_id = cur.fetchone()[0]
+    user_id = cur.fetchone()[0]
 
     con.commit()
     cur.close()
@@ -37,14 +37,14 @@ def add_customer():
 
     return customer_email
 
-def add_sale(product_id, customer, quantity, date):
+def add_sale(product_id, user_id, quantity, date):
     con = create_connection()
     cur = con.cursor()
 
     cur.execute("""
-        INSERT INTO sales (product_id, customer, quantity, date)
+        INSERT INTO sales (product_id, user_id, quantity, date)
         VALUES (%s, %s, %s, %s)
-        RETURNING id;""", (product_id, customer, quantity, date))
+        RETURNING id;""", (product_id, user_id, quantity, date))
     
     sale_id = cur.fetchone()[0]
 
@@ -63,6 +63,7 @@ def sorts():
 
     cur.close()
     con.close()
+
     return results
 
 def countries():
@@ -74,4 +75,11 @@ def countries():
 
     cur.close()
     con.close()
+
     return results
+
+def add_sort():
+    pass
+
+def add_country():
+    pass
