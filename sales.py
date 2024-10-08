@@ -1,4 +1,5 @@
 import sales_funcs
+from datetime import datetime
 
 def sales():
     running = True
@@ -22,14 +23,50 @@ def sales():
 
 
 def auth():
-    pass
+    print('\n---Авторизация--_\n ')
+    running = True
+    while running:
+        email = str(input("Укажите Ваш email: "))
+        if not sales_funcs.check_user(email):
+            print('\n---Вход выполнен успешно---')
+            running = False
+            return email
+        else:
+            confirm = int(input('!!! Пользователя с такой почтой не существует !!!\n\n1 - Попробовать ещё раз\n2 - Перейти к регистрации\n\nВвод: '))
+            if confirm == 1:
+                pass
+            elif confirm == 2:
+                running = False
+                reg()
+            
 
 def reg():
-    pass
+    email = str(input("\n---Создание пользователя---\n\nУкажите Ваш email: "))
+    last_name = str(input("Фамилия: "))
+    first_name = str(input("Имя: "))
+    middle_name = str(input("Отчество: "))
+    phone_number = str(input("Номер телефона: "))
+    while True:
+        try:
+            date_of_birth = datetime.strptime(input("Дата рождения в формате (DD.MM.YYYY): "), "%d.%m.%Y")
+            break
+        except ValueError:
+            print("Неправильный формат даты. Пожалуйста, введите дату в формате DD.MM.YYYY\nДата: ")
+    if sales_funcs.check_user(email):
+        print(f'\nСоздать пользователя со следующими параметрами:\n\nEmail: {email}\nФИО: {last_name} {first_name} {middle_name}\nНомер телефона: {phone_number}\nДата рождения: {date_of_birth.date()}')
+        confirm = int(input('\n1 - cоздать пользователя\n2 - отмена\n\nВвод: '))
+        if confirm == 1:
+            result = sales_funcs.add_user(email, last_name, first_name,middle_name, phone_number, date_of_birth.date())
+            print(f'\nПользователь {email} был успешно создан.')
+            return email
+        else:
+            pass
+    else:
+        print('\n!!! Пользователь с такой почтой уже существует !!!')
 
+    
 def add_product_sort():
     pass
-
 def add_product_country():
     pass
 
