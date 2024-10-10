@@ -16,7 +16,9 @@ def sale():
 
 Выберите действие: """))
         if n == 1:
-           pass
+            print('\n')
+            products_list = sales_funcs.get_products()
+            print(tabulate(products_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
         elif n == 2:
             pass
         elif n == 3:
@@ -79,7 +81,7 @@ def admin():
             print('')
 
 def auth():
-    print('\n---Авторизация--_\n ')
+    print('\n---Авторизация---\n ')
     running = True
     while running:
         email = str(input("Укажите Ваш email: "))
@@ -93,7 +95,7 @@ def auth():
                 pass
             elif confirm == 2:
                 running = False
-                reg()
+                return reg()
             
 
 def reg():
@@ -112,7 +114,7 @@ def reg():
         print(f'\nСоздать пользователя со следующими параметрами:\n\nEmail: {email}\nФИО: {last_name} {first_name} {middle_name}\nНомер телефона: {phone_number}\nДата рождения: {date_of_birth.date()}')
         confirm = int(input('\n1 - cоздать пользователя\n2 - отмена\n\nВвод: '))
         if confirm == 1:
-            result = sales_funcs.add_user(email, last_name, first_name,middle_name, phone_number, date_of_birth.date())
+            result = sales_funcs.add_user(email, last_name, first_name, middle_name, phone_number, date_of_birth.date())
             print(f'\nПользователь {email} был успешно создан.')
             return email
         else:
@@ -161,9 +163,7 @@ def add_product():
         else:
             return
 
-    print("""\n--- Добавление товара ---
-Выберите сорт апельсина:
-""")
+    print("\n--- Добавление товара ---\nВыберите сорт апельсина:")
     for i in range(len(sorts)):
         print(sorts[i])
         
@@ -175,9 +175,7 @@ def add_product():
         else:
             sort = int(input("\n Вы указали сорт апельсина неверно, попробуйте ещё раз: "))
 
-    print("""\n--- Добавление товара ---
-Выберите страну производства:
-""")
+    print("\n--- Добавление товара ---\nВыберите страну производства:\n\n")
     countries = [f"{row[0]} - {row[1]}" for row in sales_funcs.countries()]
     for i in range(len(countries)):
         print(countries[i])
@@ -190,18 +188,7 @@ def add_product():
         else:
             sort = int(input("Вы указали страну неверно, попробуйте ещё раз: "))   
     price = float(input("\n Укажите цену за штуку: "))
-    confirm = int(input(f"""\n--- Вы хотите добавить товар со следущими параметрами: ---
-
-Сорт: {sorts[sort-1]}
-Страна: {countries[country-1]}
-Цена: {price} руб/шт
-
---- Подтвердите действие: --- 
-
-1 - продолжить
-0 - отменить
-
-Ответ: """))
+    confirm = int(input(f"\n--- Вы хотите добавить товар со следущими параметрами: ---\n\nСорт: {sorts[sort-1]}\nСтрана: {countries[country-1]}\nЦена: {price} руб/шт\n\n--- Подтвердите действие: ---\n\n1 - продолжить\n0 - отменить\n\nОтвет: "))
     if confirm == 1:
         result = sales_funcs.add_product(sort, country, price)
         if result:

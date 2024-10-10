@@ -7,6 +7,7 @@ class App:
 
     def start(self):
         self.user = auth()
+        print(self.user)
         self.permission = sales_funcs.get_permisson(self.user)
         print(f'\n---Пользователь {self.user}, уровень доступа: {self.permission}---\n')
         if self.permission == 1:

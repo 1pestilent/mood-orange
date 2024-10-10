@@ -47,17 +47,18 @@ def check_user(email):
     cur.close()
     con.close()
 
-def add_user(email, last_name,first_name,middle_name,phone_number,date_of_birth,permission = 1):
+def add_user(email, last_name,first_name, middle_name, phone_number, date_of_birth):
     con = create_connection()
     cur = con.cursor()
 
     cur.execute("""
         INSERT INTO users (email, last_name, first_name, middle_name, phone_number, date_of_birth, permissions)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-        RETURNING email; """,(email, last_name, first_name, middle_name, phone_number, date_of_birth,permission))
+        VALUES (%s, %s, %s, %s, %s, %s, '1')
+        RETURNING email; """,(email, last_name, first_name, middle_name, phone_number, date_of_birth))
 
     user_id = cur.fetchone()[0]
 
+    con.commit()
     cur.close()
     con.close()
 
@@ -119,7 +120,6 @@ def countries_list():
         return print('\n!!! В базе данных нет ни одной страны !!!\n')   
     else:
         return countries_list
-
 
 def add_sort(sort_name):
 
