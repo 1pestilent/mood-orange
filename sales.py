@@ -1,5 +1,7 @@
-import sales_funcs
 from datetime import datetime
+from tabulate import tabulate
+
+import sales_funcs
 
 def sale():
     running = True
@@ -41,23 +43,31 @@ def admin():
 
 Выберите действие: """))
         if n == 1:
-            nn = int(input("\nПосмотреть:\n\n1. Товары\n2. Сорта\n3. Страны\n\nВыбор: "))
+            nn = int(input("\nПосмотреть:\n\n1. Товары\n2. Сорта\n3. Страны\n0. Вернуться назад\n\nВыбор: "))
             if nn == 1:
-                print(sales_funcs.get_products())
+                print('\n')
+                products_list = sales_funcs.get_products()
+                print(tabulate(products_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
             elif nn == 2:
-                print(sales_funcs.sorts())
+                sorts_list = sales_funcs.sorts()
+                print(tabulate(sorts_list, headers=['ID','Сорт'],tablefmt="grid"))
             elif nn == 3:
-                print(sales_funcs.countries())
+                countries_list = sales_funcs.countries()
+                print(tabulate(countries_list, headers=['ID','Страна'],tablefmt="grid"))
+            elif nn == 0:
+                pass
             else:
                 pass
         elif n == 2:
-            nn = int(input("\nСоздать:\n\n1. Товар\n2. Сорт\n3. Страну\n\nВыбор: "))
+            nn = int(input("\nСоздать:\n\n1. Товар\n2. Сорт\n3. Страну\n0. Вернуться назад\n\nВыбор: "))
             if nn == 1:
                 add_product()
             elif nn == 2:
                 add_product_sort()
             elif nn == 3:
                 add_product_country()
+            elif nn == 0:
+                pass
             else:
                 pass
         elif n == 3:

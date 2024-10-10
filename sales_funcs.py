@@ -87,7 +87,7 @@ def sorts():
     cur.execute("""SELECT id, sort_name FROM sorts
     ORDER BY id ASC""")
     results = cur.fetchall()
-
+    results = [[row[0], row[1].title()] for row in results]
     cur.close()
     con.close()
 
@@ -107,7 +107,7 @@ def countries():
     cur.execute("""SELECT id, country_name FROM countries
     ORDER BY id ASC""")
     results = cur.fetchall()
-
+    results = [[row[0], row[1].title()] for row in results]
     cur.close()
     con.close()
 
@@ -206,7 +206,13 @@ def get_products():
         JOIN sorts AS s ON p.sort = s.id
         JOIN countries AS c ON p.country = c.id""")
     products = cur.fetchall()
+    products_list = []
+    for row in products:
+        if row[2] == 'сша':
+            products_list.append((row[0], row[1].title(), row[2].upper(), row[3]))
+        else:
+            products_list.append((row[0], row[1].title(), row[2].title(), row[3]))
 
     cur.close()
     con.close()
-    return products
+    return products_list
