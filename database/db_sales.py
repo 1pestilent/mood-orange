@@ -1,10 +1,10 @@
 import psycopg2
 from datetime import datetime
 
-from db_conn import create_connection
+from .db_conn import create_connection
 
 def add_product(sort, country, price):
-    con = create_connection()
+    con = create_connection() 
     cur = con.cursor()
 
     cur.execute("""

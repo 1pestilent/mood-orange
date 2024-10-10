@@ -1,5 +1,5 @@
 import psycopg2
-from db_conn import create_connection
+from database.db_conn import create_connection
 
 def create_tables(con):
     cur = con.cursor()

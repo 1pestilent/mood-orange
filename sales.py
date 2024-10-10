@@ -1,91 +1,12 @@
 from datetime import datetime
-from tabulate import tabulate
-
-import sales_funcs
-
-def sale():
-    running = True
-
-    while running:
-        n = int(input("""--- Выберите действие ---
-
-    1. Посмотреть ассортимент
-    2. Сделать заказ
-    3. История заказов
-    0. Закончить
-
-Выберите действие: """))
-        if n == 1:
-            print('\n')
-            products_list = sales_funcs.get_products()
-            print(tabulate(products_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
-        elif n == 2:
-            pass
-        elif n == 3:
-            pass
-        elif n == 0:
-            print('\n--- Работа приложения завершена ---\n')
-            running = False
-        else:
-            print(False)
-
-
-def admin():
-    running = True
-
-    while running:
-        n = int(input("""\n--- Выберите действие ---
-
-    1. Посмотреть...
-    2. Создать...
-    3. История
-    4. Склад
-    5. Банк
-    0. Закончить
-
-Выберите действие: """))
-        if n == 1:
-            nn = int(input("\nПосмотреть:\n\n1. Товары\n2. Сорта\n3. Страны\n0. Вернуться назад\n\nВыбор: "))
-            if nn == 1:
-                print('\n')
-                products_list = sales_funcs.get_products()
-                print(tabulate(products_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
-            elif nn == 2:
-                sorts_list = sales_funcs.sorts()
-                print(tabulate(sorts_list, headers=['ID','Сорт'],tablefmt="grid"))
-            elif nn == 3:
-                countries_list = sales_funcs.countries()
-                print(tabulate(countries_list, headers=['ID','Страна'],tablefmt="grid"))
-            elif nn == 0:
-                pass
-            else:
-                pass
-        elif n == 2:
-            nn = int(input("\nСоздать:\n\n1. Товар\n2. Сорт\n3. Страну\n0. Вернуться назад\n\nВыбор: "))
-            if nn == 1:
-                add_product()
-            elif nn == 2:
-                add_product_sort()
-            elif nn == 3:
-                add_product_country()
-            elif nn == 0:
-                pass
-            else:
-                pass
-        elif n == 3:
-            pass
-        elif n == 0:
-            print('\n--- Работа приложения завершена ---\n')
-            running = False
-        else:
-            print('')
+from database import db_sales
 
 def auth():
     print('\n---Авторизация---\n ')
     running = True
     while running:
         email = str(input("Укажите Ваш email: "))
-        if not sales_funcs.check_user(email):
+        if not db_sales.check_user(email):
             print('\n---Вход выполнен успешно---')
             running = False
             return email
@@ -110,11 +31,11 @@ def reg():
             break
         except ValueError:
             print("Неправильный формат даты. Пожалуйста, введите дату в формате DD.MM.YYYY\nДата: ")
-    if sales_funcs.check_user(email):
+    if db_sales.check_user(email):
         print(f'\nСоздать пользователя со следующими параметрами:\n\nEmail: {email}\nФИО: {last_name} {first_name} {middle_name}\nНомер телефона: {phone_number}\nДата рождения: {date_of_birth.date()}')
         confirm = int(input('\n1 - cоздать пользователя\n2 - отмена\n\nВвод: '))
         if confirm == 1:
-            result = sales_funcs.add_user(email, last_name, first_name, middle_name, phone_number, date_of_birth.date())
+            result = db_sales.add_user(email, last_name, first_name, middle_name, phone_number, date_of_birth.date())
             print(f'\nПользователь {email} был успешно создан.')
             return email
         else:
@@ -125,10 +46,10 @@ def reg():
     
 def add_product_sort():
     sort_name = str(input("\nВведите название сорта: "))
-    if sales_funcs.check_sort(sort_name):
+    if db_sales.check_sort(sort_name):
         print(f'\nСорт {sort_name} уже существует!')
     else:
-        if sales_funcs.add_sort(sort_name):
+        if db_sales.add_sort(sort_name):
             print(f"\nСорт {sort_name} успешно добавлен")
         else:
             print(f"\nДобавить сорт не удалось!")
@@ -136,17 +57,17 @@ def add_product_sort():
 
 def add_product_country():
     country_name = str(input("\nВведите название страны: "))
-    if sales_funcs.check_country(country_name):
+    if db_sales.check_country(country_name):
         print(f'\nСорт {country_name} уже существует!')
     else:
-        if sales_funcs.add_country(country_name):
+        if db_sales.add_country(country_name):
             print(f"\nСтрана {country_name} успешно добавлен")
         else:
             print(f"\nДобавить страну не удалось!")
 
 def add_product():
-    sorts = sales_funcs.sorts_list()
-    countries = sales_funcs.countries_list()
+    sorts = db_sales.sorts_list()
+    countries = db_sales.countries_list()
 
     if not sorts:
         n = int(input("Cоздать сорт:\n\n1. Да\n2. Нет\n\nВыбор: "))
@@ -176,7 +97,7 @@ def add_product():
             sort = int(input("\n Вы указали сорт апельсина неверно, попробуйте ещё раз: "))
 
     print("\n--- Добавление товара ---\nВыберите страну производства:\n\n")
-    countries = [f"{row[0]} - {row[1]}" for row in sales_funcs.countries()]
+    countries = [f"{row[0]} - {row[1]}" for row in db_sales.countries()]
     for i in range(len(countries)):
         print(countries[i])
         
@@ -190,7 +111,7 @@ def add_product():
     price = float(input("\n Укажите цену за штуку: "))
     confirm = int(input(f"\n--- Вы хотите добавить товар со следущими параметрами: ---\n\nСорт: {sorts[sort-1]}\nСтрана: {countries[country-1]}\nЦена: {price} руб/шт\n\n--- Подтвердите действие: ---\n\n1 - продолжить\n0 - отменить\n\nОтвет: "))
     if confirm == 1:
-        result = sales_funcs.add_product(sort, country, price)
+        result = db_sales.add_product(sort, country, price)
         if result:
             print(f'Товара с данными параметрами был успешно добавлен. ID({result})\n')
         else:
