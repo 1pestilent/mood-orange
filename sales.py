@@ -43,11 +43,11 @@ def admin():
         if n == 1:
             nn = int(input("\nПосмотреть:\n\n1. Товары\n2. Сорта\n3. Страны\n\nВыбор: "))
             if nn == 1:
-                pass
+                print(sales_funcs.get_products())
             elif nn == 2:
-                pass
+                print(sales_funcs.sorts())
             elif nn == 3:
-                pass
+                print(sales_funcs.countries())
             else:
                 pass
         elif n == 2:
@@ -128,9 +128,9 @@ def add_product_country():
         print(f'\nСорт {country_name} уже существует!')
     else:
         if sales_funcs.add_country(country_name):
-            print(f"\nСорт {country_name} успешно добавлен")
+            print(f"\nСтрана {country_name} успешно добавлен")
         else:
-            print(f"\nДобавить сорт не удалось!")
+            print(f"\nДобавить страну не удалось!")
 
 def add_product():
     sorts = sales_funcs.sorts_list()
@@ -160,7 +160,7 @@ def add_product():
     sort = int(input("\n Сорт апельсина: "))
     x = True
     while x:
-        if 0 < sort < (len(sorts)+1):
+        if 0 < sort <= (len(sorts)+1):
             x = False
         else:
             sort = int(input("\n Вы указали сорт апельсина неверно, попробуйте ещё раз: "))

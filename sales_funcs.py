@@ -84,7 +84,8 @@ def sorts():
     con = create_connection()
     cur = con.cursor()
 
-    cur.execute("""SELECT id, sort_name FROM sorts""")
+    cur.execute("""SELECT id, sort_name FROM sorts
+    ORDER BY id ASC""")
     results = cur.fetchall()
 
     cur.close()
@@ -103,7 +104,8 @@ def countries():
     con = create_connection()
     cur = con.cursor()
 
-    cur.execute("""SELECT id, country_name FROM countries""")
+    cur.execute("""SELECT id, country_name FROM countries
+    ORDER BY id ASC""")
     results = cur.fetchall()
 
     cur.close()
@@ -195,3 +197,16 @@ def check_country(country_name):
     con.close()
 
     return country_id    
+
+def get_products():
+    con = create_connection()
+    cur = con.cursor()
+
+    cur.execute("""SELECT p.id, s.sort_name, c. country_name, p.price FROM products AS p
+        JOIN sorts AS s ON p.sort = s.id
+        JOIN countries AS c ON p.country = c.id""")
+    products = cur.fetchall()
+
+    cur.close()
+    con.close()
+    return products
