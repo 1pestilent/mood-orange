@@ -92,6 +92,13 @@ def sorts():
 
     return results
 
+def sorts_list():
+        sort_list = [f"{row[0]} - {row[1]}" for row in sorts()]
+        if len(sort_list) == 0:
+            return print('\n!!! В базе данных нет ни одного сорта !!! \n')
+        else:
+            return sort_list
+
 def countries():
     con = create_connection()
     cur = con.cursor()
@@ -104,8 +111,87 @@ def countries():
 
     return results
 
-def add_sort():
-    pass
+def countries_list():
+    countries_list = [f"{row[0]} - {row[1]}" for row in countries()]
+    if len(countries_list) == 0:
+        return print('\n!!! В базе данных нет ни одной страны !!!\n')   
+    else:
+        return countries_list
 
-def add_country():
-    pass
+
+def add_sort(sort_name):
+
+    con = create_connection()
+    cur = con.cursor()
+
+    sort = sort_name.lower().strip()
+
+    cur.execute("""INSERT INTO sorts (sort_name)
+        VALUES (%s)
+        RETURNING id;""", (sort,))
+    
+    sort_id = cur.fetchone()[0]
+
+    con.commit()
+    cur.close()
+    con.close()
+
+    return sort_id
+
+def check_sort(sort_name):
+    con = create_connection()
+    cur = con.cursor()
+
+    sort = sort_name.lower().strip()
+    cur.execute("""
+        SELECT id FROM sorts
+        WHERE sort_name = (%s)""", (sort,))
+    try:
+        sort_id = cur.fetchone()[0]
+        return sort_id
+    except:
+        return False
+
+    cur.close()
+    con.close()
+
+    return sort_id    
+
+def add_country(country_name):
+    
+    con = create_connection()
+    cur = con.cursor()
+
+    country = country_name.lower().strip()
+
+    cur.execute("""
+        INSERT INTO countries (country_name)
+        VALUES (%s)
+        RETURNING id;""", (country,))
+    
+    country_id = cur.fetchone()[0]
+
+    con.commit()
+    cur.close()
+    con.close()
+
+    return country_id
+
+def check_country(country_name):
+    con = create_connection()
+    cur = con.cursor()
+
+    country = country_name.lower().strip()
+    cur.execute("""
+        SELECT id FROM countries
+        WHERE country_name = (%s)""", (country,))
+    try:
+        country_id = cur.fetchone()[0]
+        return country_id
+    except:
+        return False
+
+    cur.close()
+    con.close()
+
+    return country_id    
