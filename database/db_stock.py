@@ -62,9 +62,8 @@ def history_income():
         JOIN sorts AS s ON p.sort = s.id
 		JOIN countries AS c ON p.country = c.id
         """)
-    result = cur.fetchall()
-    result = [[row[0], row[1].title(),row[2].title(),row[3],row[4]] for row in results]
-
+    results = cur.fetchall()
+    result = [[row[0], row[1].title(),row[2].title(),row[3],row[4], row[5]] for row in results]
     cur.close()
     con.close()
 

@@ -1,4 +1,4 @@
-from database import db_sales
+from database import db_sales, db_stock
 from modules import sales, stock
 
 def auth():
@@ -50,7 +50,8 @@ def sale():
         n = int(input("""--- Выберите действие ---\n\n1. Посмотреть ассортимент\n2. Сделать заказ\n3. История заказов\n\n0. Закончить\n\nВыберите действие: """))
         if n == 1:
             print('\n')
-            sales.ProductList.table()
+            products_list = sales.ProductList()
+            products_list.table()
         elif n == 2:
             pass
         elif n == 3:
@@ -71,8 +72,8 @@ def admin():
             nn = int(input("\nПосмотреть:\n\n1. Товары\n2. Сорта\n3. Страны\n\n0. Вернуться назад\n\nВыбор: "))
             if nn == 1:
                 print('\n')
-                products_list = db_sales.get_products()
-                print(tabulate(products_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
+                products_list = sales.ProductList()
+                products_list.table()
             elif nn == 2:
                 sorts_list = db_sales.sorts()
                 print(tabulate(sorts_list, headers=['ID','Сорт'],tablefmt="grid"))
@@ -96,11 +97,14 @@ def admin():
             else:
                 pass
         elif n == 4:
-            nn = int(input("\nУправление складом:\n\n1. Поставка\n2. Списание\n0. Вернуться назад\n\nВыбор: "))
+            nn = int(input("\nУправление складом:\n\n1. Поставка\n2. Списание\n3. Приход/расход\n0. Вернуться назад\n\nВыбор: "))
             if nn == 1:
                 stock.stock_income()
             elif nn == 2:
-                pass
+                stock.stock_expense()
+            elif nn == 3:
+                income_list = sales.IncomeList()
+                income_list.table()
             elif nn == 0:
                 pass
             else:

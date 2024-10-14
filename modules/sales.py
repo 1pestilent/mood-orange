@@ -1,7 +1,7 @@
 from datetime import datetime
 from tabulate import tabulate
 
-from database import db_sales
+from database import db_sales, db_stock
     
 def add_product_sort():
     sort_name = str(input("\nВведите название сорта: "))
@@ -82,7 +82,13 @@ class ProductList:
     def __init__(self):
         self.product_list = db_sales.get_products()
     def table(self):
-        return print(tabulate(self.product_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
+        return print(tabulate(self.product_list, headers=['ID', 'Сорт', 'Страна', 'Цена','На складе'], tablefmt="grid"))
+
+class IncomeList:
+    def __init__(self):
+        self.income_list = db_stock.history_income()
+    def table(self):
+        return print(tabulate(self.income_list, headers=['ID', 'Тип операции', 'Сорт', 'Страна', 'Дата','Количество'], tablefmt="grid"))
 
 
 

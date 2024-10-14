@@ -202,17 +202,38 @@ def get_products():
     con = create_connection()
     cur = con.cursor()
 
-    cur.execute("""SELECT p.id, s.sort_name, c. country_name, p.price FROM products AS p
+    cur.execute("""SELECT p.id, s.sort_name, c. country_name, p.price, st.quantity FROM products AS p
         JOIN sorts AS s ON p.sort = s.id
-        JOIN countries AS c ON p.country = c.id""")
+        JOIN countries AS c ON p.country = c.id
+        JOIN stock AS st ON p.id = st.product_id
+        ORDER BY st.id DESC
+        LIMIT 1;""")
+        
     products = cur.fetchall()
     products_list = []
     for row in products:
         if row[2] == 'сша':
-            products_list.append((row[0], row[1].title(), row[2].upper(), row[3]))
+            products_list.append((row[0], row[1].title(), row[2].upper(), row[3],row[4]))
         else:
-            products_list.append((row[0], row[1].title(), row[2].title(), row[3]))
+            products_list.append((row[0], row[1].title(), row[2].title(), row[3],row[4]))
 
     cur.close()
     con.close()
     return products_list
+
+def check_product(product_id):
+    con = create_connection()
+    cur = con.cursor()
+
+    cur.execute("""
+        SELECT CASE WHEN EXISTS( 
+            SELECT 1 FROM stock 
+            WHERE product_id = %s) 
+        THEN 1 ELSE 0 END;""",(product_id,))
+
+    result = cur.fetchone()[0]
+
+    cur.close()
+    con.close()
+
+    return result
