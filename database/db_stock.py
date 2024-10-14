@@ -3,20 +3,53 @@ from datetime import datetime
 
 from database.db_conn import create_connection
 
-def add_income(income_type, product_id, quantity, date):
+def add_income(income_type, product_id, quantity):
     con = create_connection()
     cur = con.cursor()
 
     cur.execute("""
-        INSERT INTO income (income_type,product_id ,quantity, date)
+        INSERT INTO income (type_id,product_id ,quantity, date)
         VALUES (%s, %s, %s, %s)
-        RETURNING id; """,(income_type, product_id, quantity, date))
+        RETURNING id; """,(income_type, product_id, quantity, datetime.now().date()))
 
     con.commit()
     cur.close()
     con.close()
 
     return id
+
+def income_stock(product_id, quantity):
+    con = create_connection()
+    cur = con.cursor()
+
+    cur.execute("""
+        INSERT INTO stock (product_id,quantity)
+        VALUES (%s, %s)
+        RETURNING id; """,(product_id, quantity))
+
+    con.commit()
+    cur.close()
+    con.close()
+
+def get_quantity(product_id):
+    con = create_connection()
+    cur = con.cursor()
+
+    cur.execute("""
+        SELECT quantity FROM stock 
+        WHERE product_id = %s
+        ORDER BY id DESC
+        LIMIT 1;""", (product_id,))
+    result = cur.fetchone()
+    if result is not None:
+        quantity = result[0]
+    else:
+        quantity = 0
+
+    cur.close()
+    con.close()  
+
+    return quantity
 
 def history_income():
     con = create_connection()

@@ -1,4 +1,6 @@
 from datetime import datetime
+from tabulate import tabulate
+
 from database import db_sales
     
 def add_product_sort():
@@ -76,6 +78,34 @@ def add_product():
     else:
         print('Добавлена товара отменено!')
 
+class ProductList:
+    def __init__(self):
+        self.product_list = db_sales.get_products()
+    def table(self):
+        return print(tabulate(self.product_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
 
-def order():
-    pass
+
+
+class Order:
+    def __init__(self, user):
+        self.user = user
+        self.product_list = ProductList()
+        self.product_id = None
+        self.quantity = None
+        self.date = None
+
+    def create_transaction(self):
+        self.product_list.table()
+
+        self.product_id = int(input("\n\nУкажите ID нужно товара: "))
+        # Проверка количества товара на складе
+        # print("Доступно к покупке: {avavailable}")
+        self.quantity = int(input('Укажите количество товара: '))
+        if quantity <= 0:
+            print("Вы указали количество неверно, попробуйте еще раз")
+        self.date = datetime.now().date()
+
+    
+
+
+

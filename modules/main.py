@@ -1,6 +1,5 @@
 from database import db_sales
-from tabulate import tabulate
-from modules import sales
+from modules import sales, stock
 
 def auth():
     print('\n---Авторизация---\n ')
@@ -51,8 +50,7 @@ def sale():
         n = int(input("""--- Выберите действие ---\n\n1. Посмотреть ассортимент\n2. Сделать заказ\n3. История заказов\n\n0. Закончить\n\nВыберите действие: """))
         if n == 1:
             print('\n')
-            products_list = db_sales.get_products()
-            print(tabulate(products_list, headers=['ID', 'Сорт', 'Страна', 'Цена'], tablefmt="grid"))
+            sales.ProductList.table()
         elif n == 2:
             pass
         elif n == 3:
@@ -97,8 +95,16 @@ def admin():
                 pass
             else:
                 pass
-        elif n == 3:
-            pass
+        elif n == 4:
+            nn = int(input("\nУправление складом:\n\n1. Поставка\n2. Списание\n0. Вернуться назад\n\nВыбор: "))
+            if nn == 1:
+                stock.stock_income()
+            elif nn == 2:
+                pass
+            elif nn == 0:
+                pass
+            else:
+                pass
         elif n == 0:
             print('\n--- Работа приложения завершена ---\n')
             running = False
