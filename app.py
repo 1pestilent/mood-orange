@@ -8,9 +8,10 @@ class App:
 
     def start(self):
         self.user = main.auth()
-        print(self.user)
         self.permission = db_sales.get_permisson(self.user)
+
         print(f'\n---Пользователь {self.user}, уровень доступа: {self.permission}---\n')
+        
         if self.permission == 1:
             main.sale()
         elif self.permission == 2:
