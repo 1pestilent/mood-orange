@@ -19,5 +19,6 @@ PG_USER = 'root@root.com'
 PG_PASSWORD = 'root'
 PG_PORT = '8080'
 ```
-5. Запускаем БД через `docker compose up`
-6. Создаем структуру БД запустив `db_struct`
+5. Запуск БД через `docker compose up`
+6. Создание структуры БД `db_struct.py`
+7. Запуск приложения `app.py`

@@ -1,48 +1,5 @@
 from datetime import datetime
 from database import db_sales
-
-def auth():
-    print('\n---Авторизация---\n ')
-    running = True
-    while running:
-        email = str(input("Укажите Ваш email: "))
-        if not db_sales.check_user(email):
-            print('\n---Вход выполнен успешно---')
-            running = False
-            return email
-        else:
-            confirm = int(input('!!! Пользователя с такой почтой не существует !!!\n\n1 - Попробовать ещё раз\n2 - Перейти к регистрации\n\nВвод: '))
-            if confirm == 1:
-                pass
-            elif confirm == 2:
-                running = False
-                return reg()
-            
-
-def reg():
-    email = str(input("\n---Создание пользователя---\n\nУкажите Ваш email: "))
-    last_name = str(input("Фамилия: "))
-    first_name = str(input("Имя: "))
-    middle_name = str(input("Отчество: "))
-    phone_number = str(input("Номер телефона: "))
-    while True:
-        try:
-            date_of_birth = datetime.strptime(input("Дата рождения в формате (DD.MM.YYYY): "), "%d.%m.%Y")
-            break
-        except ValueError:
-            print("Неправильный формат даты. Пожалуйста, введите дату в формате DD.MM.YYYY\nДата: ")
-    if db_sales.check_user(email):
-        print(f'\nСоздать пользователя со следующими параметрами:\n\nEmail: {email}\nФИО: {last_name} {first_name} {middle_name}\nНомер телефона: {phone_number}\nДата рождения: {date_of_birth.date()}')
-        confirm = int(input('\n1 - cоздать пользователя\n2 - отмена\n\nВвод: '))
-        if confirm == 1:
-            result = db_sales.add_user(email, last_name, first_name, middle_name, phone_number, date_of_birth.date())
-            print(f'\nПользователь {email} был успешно создан.')
-            return email
-        else:
-            pass
-    else:
-        print('\n!!! Пользователь с такой почтой уже существует !!!')
-
     
 def add_product_sort():
     sort_name = str(input("\nВведите название сорта: "))
